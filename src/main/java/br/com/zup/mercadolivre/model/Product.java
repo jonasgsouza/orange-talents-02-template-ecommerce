@@ -34,8 +34,8 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private User user;
+    @JoinColumn(name = "dono_id")
+    private User owner;
 
     @Column(name = "data_criacao")
     private LocalDate createdAt = LocalDate.now();
@@ -53,17 +53,17 @@ public class Product {
         this.quantity = quantity;
         this.description = description;
         this.category = category;
-        this.user = user;
+        this.owner = user;
     }
 
-    public Product(String name, BigDecimal price, Integer quantity, Set<Characteristic> characteristics, String description, Category category, User user, LocalDate createdAt) {
+    public Product(String name, BigDecimal price, Integer quantity, Set<Characteristic> characteristics, String description, Category category, User owner, LocalDate createdAt) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.characteristics.addAll(characteristics);
         this.description = description;
         this.category = category;
-        this.user = user;
+        this.owner = owner;
         this.createdAt = createdAt;
     }
 
@@ -103,8 +103,8 @@ public class Product {
         return createdAt;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
     public void addImages(List<String> links) {

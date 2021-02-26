@@ -35,10 +35,10 @@ public class QuestionControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ResultActions performRequest(NewQuestionRequest request) throws Exception {
+    private ResultActions performRequest(NewQuestionRequest request, Long productId) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/questions")
+                        .post("/products/" + productId + "/questions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
         );
@@ -47,8 +47,8 @@ public class QuestionControllerTest {
     @Test
     @DisplayName("Deveria criar uma nova pergunta")
     public void shouldCreateNewQuestion() throws Exception {
-        var request = new NewQuestionRequest("Esse notebook é bom?", 1L);
-        performRequest(request).andExpect(MockMvcResultMatchers.status().isOk());
+        var request = new NewQuestionRequest("Esse notebook é bom?");
+        performRequest(request, 1L).andExpect(MockMvcResultMatchers.status().isOk());
         var optional = questionRepository.findById(1L);
         Assertions.assertTrue(optional.isPresent());
         Assertions.assertEquals(request.getTitle(), optional.get().getTitle());

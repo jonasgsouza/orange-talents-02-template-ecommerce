@@ -19,8 +19,8 @@ public class Question {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private User user;
+    @JoinColumn(name = "dono_id")
+    private User owner;
 
     @Column(name = "dataCriacao")
     private LocalDate createdAt = LocalDate.now();
@@ -29,9 +29,9 @@ public class Question {
     public Question() {
     }
 
-    public Question(String title, Product product, User user) {
+    public Question(String title, Product product, User owner) {
         this.title = title;
-        this.user = user;
+        this.owner = owner;
         this.product = product;
     }
 
@@ -43,12 +43,16 @@ public class Question {
         return title;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
     public Product getProduct() {
         return product;
+    }
+
+    public User getProductOwner() {
+        return product.getOwner();
     }
 
     public LocalDate getCreatedAt() {

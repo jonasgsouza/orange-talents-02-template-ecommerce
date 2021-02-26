@@ -35,10 +35,10 @@ public class OpinionControllerTest {
     @Autowired
     private OpinionRepository opinionRepository;
 
-    private ResultActions performRequest(NewOpinionRequest request) throws Exception {
+    private ResultActions performRequest(NewOpinionRequest request, Long productId) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/opinions")
+                        .post("/products/" + productId + "/opinions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
         );
@@ -47,8 +47,8 @@ public class OpinionControllerTest {
     @Test
     @DisplayName("Deveria criar uma nova opinião")
     public void shouldCreateNewOpinion() throws Exception {
-        var request = new NewOpinionRequest(Short.valueOf("1"), "Minha opinião", "Uma descrição", 1L);
-        performRequest(request).andExpect(MockMvcResultMatchers.status().isOk());
+        var request = new NewOpinionRequest(Short.valueOf("1"), "Minha opinião", "Uma descrição");
+        performRequest(request, 1L).andExpect(MockMvcResultMatchers.status().isOk());
         var optional = opinionRepository.findById(1L);
         Assertions.assertTrue(optional.isPresent());
         var product = optional.get();
@@ -59,8 +59,8 @@ public class OpinionControllerTest {
     @Test
     @DisplayName("Deveria retornar status 400 com opinião sem nota e título")
     public void shouldCreateReturnBadRequestWithMissingNoteAndTitle() throws Exception {
-        var request = new NewOpinionRequest(null, null, "Uma descrição", 1L);
-        performRequest(request).andExpect(MockMvcResultMatchers.status().isBadRequest());
+        var request = new NewOpinionRequest(null, null, "Uma descrição");
+        performRequest(request, 1L).andExpect(MockMvcResultMatchers.status().isBadRequest());
         Assertions.assertEquals(0, opinionRepository.count());
     }
 }

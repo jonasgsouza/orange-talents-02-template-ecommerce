@@ -4,7 +4,10 @@ import br.com.zup.mercadolivre.model.Opinion;
 import br.com.zup.mercadolivre.model.Product;
 import br.com.zup.mercadolivre.model.User;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class NewOpinionRequest {
 
@@ -19,14 +22,11 @@ public class NewOpinionRequest {
     @Size(max = 500)
     private String description;
 
-    @NotNull
-    private Long productId;
 
-    public NewOpinionRequest(@Min(1) @Max(5) Short note, @NotBlank String title, @NotBlank @Size(max = 500) String description, @NotNull Long productId) {
+    public NewOpinionRequest(@Min(1) @Max(5) Short note, @NotBlank String title, @NotBlank @Size(max = 500) String description) {
         this.note = note;
         this.title = title;
         this.description = description;
-        this.productId = productId;
     }
 
     public Short getNote() {
@@ -39,11 +39,6 @@ public class NewOpinionRequest {
 
     public String getDescription() {
         return description;
-    }
-
-
-    public Long getProductId() {
-        return productId;
     }
 
     public Opinion toModel(Product product, User owner) {

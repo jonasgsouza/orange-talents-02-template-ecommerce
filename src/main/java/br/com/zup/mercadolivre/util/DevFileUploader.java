@@ -13,6 +13,6 @@ public class DevFileUploader implements FileUploader {
 
     @Override
     public List<String> send(List<MultipartFile> files) {
-        return files.stream().map(f -> "http://link-to-/" + f.getName()).collect(Collectors.toList());
+        return files.stream().map(f -> "http://link-to/" + f.getName()).collect(Collectors.toList());
     }
 }
