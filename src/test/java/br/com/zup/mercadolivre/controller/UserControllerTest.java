@@ -44,7 +44,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
         ).andExpect(MockMvcResultMatchers.status().isOk());
-        var optional = userRepository.findById(1L);
+        var optional = userRepository.findById(2L);
         Assertions.assertTrue(optional.isPresent());
         var user = optional.get();
         Assertions.assertEquals(request.getEmail(), user.getEmail());

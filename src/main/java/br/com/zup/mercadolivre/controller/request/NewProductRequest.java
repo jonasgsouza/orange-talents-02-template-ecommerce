@@ -6,6 +6,7 @@ import br.com.zup.mercadolivre.model.Product;
 import br.com.zup.mercadolivre.model.User;
 import br.com.zup.mercadolivre.repository.CategoryRepository;
 import br.com.zup.mercadolivre.validation.annotation.Exists;
+import br.com.zup.mercadolivre.validation.annotation.UniqueElements;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
@@ -28,6 +29,7 @@ public class NewProductRequest {
 
     @NotNull
     @Size(min = 3)
+    @UniqueElements
     private List<NewCharacteristicRequest> characteristics = new ArrayList<>();
 
     @NotBlank

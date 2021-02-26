@@ -2,13 +2,10 @@ package br.com.zup.mercadolivre.controller;
 
 import br.com.zup.mercadolivre.controller.request.NewCharacteristicRequest;
 import br.com.zup.mercadolivre.controller.request.NewProductRequest;
-import br.com.zup.mercadolivre.model.Category;
-import br.com.zup.mercadolivre.model.Product;
 import br.com.zup.mercadolivre.repository.CategoryRepository;
 import br.com.zup.mercadolivre.repository.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +43,6 @@ public class ProductControllerTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @BeforeEach
-    private void setUp() {
-        categoryRepository.save(new Category("Notebooks", null));
-    }
-
     private ResultActions performRequest(NewProductRequest request) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
@@ -77,7 +69,7 @@ public class ProductControllerTest {
                         1L
                 );
         performRequest(request).andExpect(MockMvcResultMatchers.status().isOk());
-        var optional = productRepository.findById(1L);
+        var optional = productRepository.findById(2L);
         Assertions.assertTrue(optional.isPresent());
         var product = optional.get();
         Assertions.assertEquals(request.getName(), product.getName());
@@ -102,7 +94,8 @@ public class ProductControllerTest {
                         1L
                 );
         performRequest(request).andExpect(MockMvcResultMatchers.status().isBadRequest());
-        Assertions.assertEquals(0, productRepository.count());
+        var optional = productRepository.findByName(request.getName());
+        Assertions.assertFalse(optional.isPresent());
     }
 
     @Test
@@ -110,7 +103,7 @@ public class ProductControllerTest {
     public void shouldReturnBadRequestWithMissingCharacteristics() throws Exception {
         var request =
                 new NewProductRequest(
-                        "Notebook Dell Latitude 7400",
+                        "Notebook asus",
                         new BigDecimal("12000"),
                         20,
                         Collections.singletonList(
@@ -120,7 +113,8 @@ public class ProductControllerTest {
                         1L
                 );
         performRequest(request).andExpect(MockMvcResultMatchers.status().isBadRequest());
-        Assertions.assertEquals(0, productRepository.count());
+        var optional = productRepository.findByName(request.getName());
+        Assertions.assertFalse(optional.isPresent());
     }
 
     @Test
@@ -128,7 +122,7 @@ public class ProductControllerTest {
     public void shouldReturnBadRequestWithDuplicatedCharacteristics() throws Exception {
         var request =
                 new NewProductRequest(
-                        "Notebook Dell Latitude 7400",
+                        "Notebook asus",
                         new BigDecimal("12000"),
                         20,
                         Arrays.asList(
@@ -140,7 +134,8 @@ public class ProductControllerTest {
                         1L
                 );
         performRequest(request).andExpect(MockMvcResultMatchers.status().isBadRequest());
-        Assertions.assertEquals(0, productRepository.count());
+        var optional = productRepository.findByName(request.getName());
+        Assertions.assertFalse(optional.isPresent());
     }
 
 }

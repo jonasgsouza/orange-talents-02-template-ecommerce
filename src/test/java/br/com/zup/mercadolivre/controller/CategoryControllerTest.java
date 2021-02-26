@@ -44,7 +44,7 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
         ).andExpect(MockMvcResultMatchers.status().isOk());
-        var optional = categoryRepository.findById(1L);
+        var optional = categoryRepository.findById(2L);
         Assertions.assertTrue(optional.isPresent());
         var category = optional.get();
         Assertions.assertEquals(request.getName(), category.getName());
