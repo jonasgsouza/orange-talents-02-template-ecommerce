@@ -2,6 +2,7 @@ package br.com.zup.mercadolivre.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,6 +43,12 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
     private List<ProductImage> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<Opinion> opinions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<Question> questions = new ArrayList<>();
 
     @Deprecated
     public Product() {
@@ -114,4 +121,25 @@ public class Product {
         this.images.addAll(images);
     }
 
+    public List<ProductImage> getImages() {
+        return Collections.unmodifiableList(images);
+    }
+
+    public List<Opinion> getOpinions() {
+        return Collections.unmodifiableList(opinions);
+    }
+
+    public List<Question> getQuestions() {
+        return Collections.unmodifiableList(questions);
+    }
+
+    public BigDecimal averageRate() {
+        var total = this.opinions.stream().mapToInt(o -> Integer.valueOf(o.getRate())).sum();
+        var average = BigDecimal.valueOf(total);
+        return average.divide(BigDecimal.valueOf(totalRating()));
+    }
+
+    public Integer totalRating() {
+        return opinions.size();
+    }
 }

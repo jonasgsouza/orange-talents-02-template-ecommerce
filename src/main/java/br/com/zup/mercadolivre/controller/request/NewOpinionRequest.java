@@ -13,7 +13,7 @@ public class NewOpinionRequest {
 
     @Min(1)
     @Max(5)
-    private Short note;
+    private Short rate;
 
     @NotBlank
     private String title;
@@ -23,14 +23,14 @@ public class NewOpinionRequest {
     private String description;
 
 
-    public NewOpinionRequest(@Min(1) @Max(5) Short note, @NotBlank String title, @NotBlank @Size(max = 500) String description) {
-        this.note = note;
+    public NewOpinionRequest(@Min(1) @Max(5) Short rate, @NotBlank String title, @NotBlank @Size(max = 500) String description) {
+        this.rate = rate;
         this.title = title;
         this.description = description;
     }
 
-    public Short getNote() {
-        return note;
+    public Short getRate() {
+        return rate;
     }
 
     public String getTitle() {
@@ -42,6 +42,6 @@ public class NewOpinionRequest {
     }
 
     public Opinion toModel(Product product, User owner) {
-        return new Opinion(note, title, description, product, owner);
+        return new Opinion(rate, title, description, product, owner);
     }
 }

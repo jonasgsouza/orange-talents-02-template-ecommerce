@@ -11,7 +11,7 @@ public class Opinion {
     private Long id;
 
     @Column(name = "nota")
-    private Short note;
+    private Short rate;
 
     @Column(name = "titulo")
     private String title;
@@ -31,8 +31,8 @@ public class Opinion {
     public Opinion() {
     }
 
-    public Opinion(Short note, String title, String description, Product product, User user) {
-        this.note = note;
+    public Opinion(Short rate, String title, String description, Product product, User user) {
+        this.rate = rate;
         this.title = title;
         this.description = description;
         this.user = user;
@@ -43,8 +43,8 @@ public class Opinion {
         return id;
     }
 
-    public Short getNote() {
-        return note;
+    public Short getRate() {
+        return rate;
     }
 
     public String getTitle() {

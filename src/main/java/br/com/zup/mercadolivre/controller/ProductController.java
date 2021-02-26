@@ -3,6 +3,7 @@ package br.com.zup.mercadolivre.controller;
 import br.com.zup.mercadolivre.controller.request.NewProductImageRequest;
 import br.com.zup.mercadolivre.controller.request.NewProductRequest;
 import br.com.zup.mercadolivre.controller.response.CreatedProductResponse;
+import br.com.zup.mercadolivre.controller.response.ProductDetailResponse;
 import br.com.zup.mercadolivre.exception.NotFoundException;
 import br.com.zup.mercadolivre.model.User;
 import br.com.zup.mercadolivre.repository.CategoryRepository;
@@ -45,6 +46,13 @@ public class ProductController {
         product.addImages(links);
         productRepository.save(product);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    @RequestMapping("/{id}")
+    public ResponseEntity<ProductDetailResponse> find(@PathVariable Long id) {
+        var product = productRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        return ResponseEntity.ok(new ProductDetailResponse(product));
     }
 
 }
