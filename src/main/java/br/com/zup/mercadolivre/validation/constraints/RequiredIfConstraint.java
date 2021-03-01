@@ -1,24 +1,26 @@
 package br.com.zup.mercadolivre.validation.constraints;
 
 import br.com.zup.mercadolivre.validation.annotation.RequiredIf;
-import br.com.zup.mercadolivre.validation.interfaces.RequiredIfCondition;
+import br.com.zup.mercadolivre.validation.interfaces.RequiredIfSupplier;
 import org.springframework.beans.BeanWrapperImpl;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.InvocationTargetException;
 
 public class RequiredIfConstraint implements ConstraintValidator<RequiredIf, Object> {
-    @PersistenceContext
     private EntityManager manager;
 
-    private RequiredIfCondition condition;
+    private RequiredIfSupplier condition;
 
     private String field;
 
     private String message;
+
+    public RequiredIfConstraint(EntityManager manager) {
+        this.manager = manager;
+    }
 
     @Override
     public void initialize(RequiredIf constraintAnnotation) {

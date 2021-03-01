@@ -1,7 +1,7 @@
 package br.com.zup.mercadolivre.validation.annotation;
 
 import br.com.zup.mercadolivre.validation.constraints.RequiredIfConstraint;
-import br.com.zup.mercadolivre.validation.interfaces.RequiredIfCondition;
+import br.com.zup.mercadolivre.validation.interfaces.RequiredIfSupplier;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequiredIf {
 
-    Class<? extends RequiredIfCondition> condition();
+    Class<? extends RequiredIfSupplier> condition();
 
     String field();
 

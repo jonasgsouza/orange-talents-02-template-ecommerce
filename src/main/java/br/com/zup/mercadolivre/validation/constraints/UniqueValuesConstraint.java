@@ -5,7 +5,6 @@ import br.com.zup.mercadolivre.validation.util.ValidationUtils;
 import org.springframework.beans.BeanWrapperImpl;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UniqueValuesConstraint implements ConstraintValidator<UniqueValues, Object> {
-    @PersistenceContext
     private EntityManager manager;
 
     private List<String> fields;
@@ -21,6 +19,10 @@ public class UniqueValuesConstraint implements ConstraintValidator<UniqueValues,
     private Class<?> modelClass;
 
     private String message;
+
+    public UniqueValuesConstraint(EntityManager manager) {
+        this.manager = manager;
+    }
 
     @Override
     public void initialize(UniqueValues constraintAnnotation) {

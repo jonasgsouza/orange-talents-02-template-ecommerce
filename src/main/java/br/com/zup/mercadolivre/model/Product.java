@@ -1,8 +1,9 @@
 package br.com.zup.mercadolivre.model;
 
+import org.springframework.util.Assert;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class Product {
     private BigDecimal price;
 
     @Column(name = "quantidade")
-    private Integer quantity;
+    private Integer inventory;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
     private Set<Characteristic> characteristics = new HashSet<>();
@@ -54,19 +55,19 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, BigDecimal price, Integer quantity, String description, Category category, User user) {
+    public Product(String name, BigDecimal price, Integer inventory, String description, Category category, User user) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
+        this.inventory = inventory;
         this.description = description;
         this.category = category;
         this.owner = user;
     }
 
-    public Product(String name, BigDecimal price, Integer quantity, Set<Characteristic> characteristics, String description, Category category, User owner, LocalDate createdAt) {
+    public Product(String name, BigDecimal price, Integer inventory, Set<Characteristic> characteristics, String description, Category category, User owner, LocalDate createdAt) {
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
+        this.inventory = inventory;
         this.characteristics.addAll(characteristics);
         this.description = description;
         this.category = category;
@@ -86,8 +87,8 @@ public class Product {
         return price;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getInventory() {
+        return inventory;
     }
 
     public void addCharacteristic(Characteristic characteristic) {
@@ -136,10 +137,21 @@ public class Product {
     public BigDecimal averageRate() {
         var total = this.opinions.stream().mapToInt(o -> Integer.valueOf(o.getRate())).sum();
         var average = BigDecimal.valueOf(total);
+        if (totalRating() == 0) return average;
         return average.divide(BigDecimal.valueOf(totalRating()));
     }
 
     public Integer totalRating() {
         return opinions.size();
+    }
+
+    public boolean decreaseInventory(Integer quantity) {
+        Assert.isTrue(quantity > 0, "A quantidade deve ser maior que zero para abater o estoque");
+        if (quantity <= this.inventory) {
+            this.inventory -= quantity;
+            return true;
+
+        }
+        return false;
     }
 }

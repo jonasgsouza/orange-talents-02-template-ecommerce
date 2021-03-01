@@ -3,13 +3,11 @@ package br.com.zup.mercadolivre.validation.constraints;
 import br.com.zup.mercadolivre.validation.annotation.Exists;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class ExistsConstraint implements ConstraintValidator<Exists, Object> {
-    @PersistenceContext
     private EntityManager manager;
 
     private String field;
@@ -17,6 +15,10 @@ public class ExistsConstraint implements ConstraintValidator<Exists, Object> {
     private String alias;
 
     private Class<?> modelClass;
+
+    public ExistsConstraint(EntityManager manager) {
+        this.manager = manager;
+    }
 
     @Override
     public void initialize(Exists constraintAnnotation) {

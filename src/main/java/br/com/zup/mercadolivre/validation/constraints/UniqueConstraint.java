@@ -4,14 +4,12 @@ package br.com.zup.mercadolivre.validation.constraints;
 import br.com.zup.mercadolivre.validation.annotation.Unique;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class UniqueConstraint implements ConstraintValidator<Unique, Object> {
 
-    @PersistenceContext
     private EntityManager manager;
 
     private String field;
@@ -19,6 +17,10 @@ public class UniqueConstraint implements ConstraintValidator<Unique, Object> {
     private String alias;
 
     private Class<?> modelClass;
+
+    public UniqueConstraint(EntityManager manager) {
+        this.manager = manager;
+    }
 
     @Override
     public void initialize(Unique constraintAnnotation) {

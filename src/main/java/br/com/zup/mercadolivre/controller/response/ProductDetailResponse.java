@@ -1,12 +1,11 @@
 package br.com.zup.mercadolivre.controller.response;
 
 import br.com.zup.mercadolivre.model.Product;
-import br.com.zup.mercadolivre.model.ProductImage;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class ProductDetailResponse {
     private String name;
@@ -17,18 +16,18 @@ public class ProductDetailResponse {
     private List<String> links;
     private List<OpinionResponse> opinions;
     private List<QuestionResponse> questions;
-    private List<CharacteristicResponse> characteristics;
+    private Set<CharacteristicResponse> characteristics;
 
     public ProductDetailResponse(Product product) {
-        this.links = product.getImages().stream().map(ProductImage::getLink).collect(Collectors.toList());
+        this.links = ProductImageResponse.mapList(product.getImages());
         this.name = product.getName();
         this.price = product.getPrice();
-        this.characteristics = product.getCharacteristics().stream().map(CharacteristicResponse::new).collect(Collectors.toList());
+        this.characteristics = CharacteristicResponse.mapSet(product.getCharacteristics());
         this.description = product.getDescription();
         this.averageRate = product.averageRate();
         this.totalRating = product.totalRating();
-        this.opinions = product.getOpinions().stream().map(OpinionResponse::new).collect(Collectors.toList());
-        this.questions = product.getQuestions().stream().map(QuestionResponse::new).collect(Collectors.toList());
+        this.opinions = OpinionResponse.mapList(product.getOpinions());
+        this.questions = QuestionResponse.mapList(product.getQuestions());
     }
 
     public List<String> getLinks() {
@@ -43,8 +42,8 @@ public class ProductDetailResponse {
         return price;
     }
 
-    public List<CharacteristicResponse> getCharacteristics() {
-        return Collections.unmodifiableList(characteristics);
+    public Set<CharacteristicResponse> getCharacteristics() {
+        return Collections.unmodifiableSet(characteristics);
     }
 
     public String getDescription() {

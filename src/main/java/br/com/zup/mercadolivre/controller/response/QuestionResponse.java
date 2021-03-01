@@ -2,6 +2,9 @@ package br.com.zup.mercadolivre.controller.response;
 
 import br.com.zup.mercadolivre.model.Question;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class QuestionResponse {
     private String title;
 
@@ -15,5 +18,9 @@ public class QuestionResponse {
 
     public String getTitle() {
         return title;
+    }
+
+    public static List<QuestionResponse> mapList(List<Question> questions) {
+        return questions.stream().map(QuestionResponse::new).collect(Collectors.toList());
     }
 }

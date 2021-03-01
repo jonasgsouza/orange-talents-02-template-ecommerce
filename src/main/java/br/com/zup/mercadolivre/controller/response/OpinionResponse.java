@@ -2,6 +2,9 @@ package br.com.zup.mercadolivre.controller.response;
 
 import br.com.zup.mercadolivre.model.Opinion;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class OpinionResponse {
 
     private Short note;
@@ -24,5 +27,9 @@ public class OpinionResponse {
 
     public String getDescription() {
         return description;
+    }
+
+    public static List<OpinionResponse> mapList(List<Opinion> opinions) {
+        return opinions.stream().map(OpinionResponse::new).collect(Collectors.toList());
     }
 }
