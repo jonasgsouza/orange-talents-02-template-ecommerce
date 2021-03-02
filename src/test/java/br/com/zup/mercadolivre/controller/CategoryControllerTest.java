@@ -52,7 +52,7 @@ public class CategoryControllerTest {
 
     @Test
     @DisplayName("Deveria retornar status 400 se o nome está nulo")
-    public void shouldReturnBadRequestWithBlankName() throws Exception {
+    public void shouldReturnBadRequestIfNameIsBlank() throws Exception {
         var request = new NewCategoryRequest(null, null);
         mockMvc.perform(
                 MockMvcRequestBuilders

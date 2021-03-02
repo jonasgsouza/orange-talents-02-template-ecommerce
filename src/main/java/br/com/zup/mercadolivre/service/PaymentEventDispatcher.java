@@ -8,7 +8,7 @@ import java.util.Set;
 @Service
 public class PaymentEventDispatcher {
 
-    private Set<PaymentEventListener> listeners;
+    private final Set<PaymentEventListener> listeners;
 
     public PaymentEventDispatcher(Set<PaymentEventListener> listeners) {
         this.listeners = listeners;

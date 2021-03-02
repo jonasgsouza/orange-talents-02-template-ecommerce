@@ -6,7 +6,7 @@ import br.com.zup.mercadolivre.model.Transaction;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class NewPaypalPaymentRequest {
+public class NewPaypalPaymentRequest implements NewPaymentRequest {
     @NotBlank
     private String paymentId;
 

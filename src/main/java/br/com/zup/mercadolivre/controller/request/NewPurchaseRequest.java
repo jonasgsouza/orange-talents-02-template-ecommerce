@@ -14,7 +14,7 @@ import javax.validation.constraints.Positive;
 public class NewPurchaseRequest {
 
     @NotNull
-    private PaymentGateway gateway;
+    private PaymentGateway paymentGateway;
 
     @NotNull
     @Positive
@@ -24,14 +24,14 @@ public class NewPurchaseRequest {
     @Exists(field = "id", modelClass = Product.class)
     private Long productId;
 
-    public NewPurchaseRequest(@NotNull PaymentGateway gateway, @NotNull Integer quantity, @NotNull Long productId) {
-        this.gateway = gateway;
+    public NewPurchaseRequest(@NotNull PaymentGateway paymentGateway, @NotNull Integer quantity, @NotNull Long productId) {
+        this.paymentGateway = paymentGateway;
         this.quantity = quantity;
         this.productId = productId;
     }
 
-    public PaymentGateway getGateway() {
-        return gateway;
+    public PaymentGateway getPaymentGateway() {
+        return paymentGateway;
     }
 
     public Integer getQuantity() {
@@ -44,6 +44,6 @@ public class NewPurchaseRequest {
 
     public Purchase toModel(ProductRepository productRepository, User buyer) {
         var product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(productId));
-        return new Purchase(quantity, gateway, product, buyer);
+        return new Purchase(quantity, paymentGateway, product, buyer);
     }
 }

@@ -3,7 +3,7 @@ package br.com.zup.mercadolivre.service;
 import br.com.zup.mercadolivre.model.Purchase;
 import org.springframework.web.util.UriComponentsBuilder;
 
-public class PayPal implements IPaymentGateway {
+public class PayPal implements Gateway {
 
     @Override
     public String generateUrl(Purchase purchase, UriComponentsBuilder uriBuilder) {

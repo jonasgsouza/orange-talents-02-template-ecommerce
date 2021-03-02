@@ -81,7 +81,7 @@ public class ProductControllerTest {
 
     @Test
     @DisplayName("Deveria retonar status 400 quando não enviar nome e preço")
-    public void shouldReturnBadRequestWithMissingNameAndPrice() throws Exception {
+    public void shouldReturnBadRequestIfMissingNameAndPrice() throws Exception {
         var request =
                 new NewProductRequest(
                         null,
@@ -102,7 +102,7 @@ public class ProductControllerTest {
 
     @Test
     @DisplayName("Deveria retonar status 400 quando enviar menos que 3 características")
-    public void shouldReturnBadRequestWithMissingCharacteristics() throws Exception {
+    public void shouldReturnBadRequestIfMissingCharacteristics() throws Exception {
         var request =
                 new NewProductRequest(
                         "Notebook asus",
@@ -121,7 +121,7 @@ public class ProductControllerTest {
 
     @Test
     @DisplayName("Deveria retonar status 400 quando enviar características duplicadas")
-    public void shouldReturnBadRequestWithDuplicatedCharacteristics() throws Exception {
+    public void shouldReturnBadRequestIfDuplicatedCharacteristics() throws Exception {
         var request =
                 new NewProductRequest(
                         "Notebook asus",

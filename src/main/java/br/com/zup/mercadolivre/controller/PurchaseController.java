@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/purchases")
 public class PurchaseController {
     private ProductRepository productRepository;
     private PurchaseRepository purchaseRepository;
