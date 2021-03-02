@@ -1,4 +1,4 @@
-package br.com.zup.mercadolivre.util;
+package br.com.zup.mercadolivre.service;
 
 import javax.validation.constraints.NotBlank;
 

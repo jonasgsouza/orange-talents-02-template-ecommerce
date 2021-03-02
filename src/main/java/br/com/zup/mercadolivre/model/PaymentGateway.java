@@ -1,8 +1,8 @@
 package br.com.zup.mercadolivre.model;
 
-import br.com.zup.mercadolivre.util.IPaymentGateway;
-import br.com.zup.mercadolivre.util.PagSeguro;
-import br.com.zup.mercadolivre.util.PayPal;
+import br.com.zup.mercadolivre.service.IPaymentGateway;
+import br.com.zup.mercadolivre.service.PagSeguro;
+import br.com.zup.mercadolivre.service.PayPal;
 
 public enum PaymentGateway {
     PAYPAL(new PayPal()), PAGSEGURO(new PagSeguro());

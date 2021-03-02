@@ -1,5 +1,5 @@
 package br.com.zup.mercadolivre.model;
 
-public enum PaymentStatus {
+public enum PurchaseStatus {
     INITIATED, FINISHED;
 }

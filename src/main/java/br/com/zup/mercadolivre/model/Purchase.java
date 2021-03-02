@@ -23,7 +23,7 @@ public class Purchase {
     private Integer quantity;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status = PaymentStatus.INITIATED;
+    private PurchaseStatus status = PurchaseStatus.INITIATED;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gateway_pagamento")
@@ -59,7 +59,7 @@ public class Purchase {
         return quantity;
     }
 
-    public PaymentStatus getStatus() {
+    public PurchaseStatus getStatus() {
         return status;
     }
 
@@ -87,7 +87,7 @@ public class Purchase {
         Assert.isTrue(hasNoSucceededTransaction(), "Já existe uma transação finalizada com sucesso");
         Assert.isTrue(transactions.add(transaction),
                 "Transação com id " + transaction.getGatewayTransactionId() + " já foi processada");
-
+        if (transaction.succeeded()) status = PurchaseStatus.FINISHED;
     }
 
     private boolean hasNoSucceededTransaction() {
@@ -100,5 +100,9 @@ public class Purchase {
 
     public Boolean decreaseProductInventory() {
         return product.decreaseInventory(quantity);
+    }
+
+    public Boolean isFinished() {
+        return status == PurchaseStatus.FINISHED;
     }
 }

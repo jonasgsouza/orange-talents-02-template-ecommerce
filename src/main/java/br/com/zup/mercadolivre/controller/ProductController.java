@@ -8,7 +8,7 @@ import br.com.zup.mercadolivre.exception.NotFoundException;
 import br.com.zup.mercadolivre.model.User;
 import br.com.zup.mercadolivre.repository.CategoryRepository;
 import br.com.zup.mercadolivre.repository.ProductRepository;
-import br.com.zup.mercadolivre.util.FileUploader;
+import br.com.zup.mercadolivre.service.FileUploader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

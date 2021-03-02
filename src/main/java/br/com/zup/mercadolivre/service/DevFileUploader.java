@@ -1,4 +1,4 @@
-package br.com.zup.mercadolivre.util;
+package br.com.zup.mercadolivre.service;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

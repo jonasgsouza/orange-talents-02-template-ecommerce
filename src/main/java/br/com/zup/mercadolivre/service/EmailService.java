@@ -1,4 +1,4 @@
-package br.com.zup.mercadolivre.util;
+package br.com.zup.mercadolivre.service;
 
 public interface EmailService {
 

@@ -5,7 +5,7 @@ import br.com.zup.mercadolivre.exception.InsufficientInventoryException;
 import br.com.zup.mercadolivre.model.User;
 import br.com.zup.mercadolivre.repository.ProductRepository;
 import br.com.zup.mercadolivre.repository.PurchaseRepository;
-import br.com.zup.mercadolivre.util.Emails;
+import br.com.zup.mercadolivre.service.Emails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

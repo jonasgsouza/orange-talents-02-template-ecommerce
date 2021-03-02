@@ -6,7 +6,7 @@ import br.com.zup.mercadolivre.exception.NotFoundException;
 import br.com.zup.mercadolivre.model.User;
 import br.com.zup.mercadolivre.repository.ProductRepository;
 import br.com.zup.mercadolivre.repository.QuestionRepository;
-import br.com.zup.mercadolivre.util.Emails;
+import br.com.zup.mercadolivre.service.Emails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
