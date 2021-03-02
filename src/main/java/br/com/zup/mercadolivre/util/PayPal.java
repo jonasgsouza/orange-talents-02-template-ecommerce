@@ -8,8 +8,8 @@ public class PayPal implements IPaymentGateway {
     @Override
     public String generateUrl(Purchase purchase, UriComponentsBuilder uriBuilder) {
         var redirectUrl = uriBuilder
-                .path("/payments/paypal/{id}")
-                .buildAndExpand(purchase.getUuid())
+                .path("/payments/paypal")
+                .buildAndExpand()
                 .toUri();
         return "paypal.com/" + purchase.getUuid() + "?redirectUrl=" + redirectUrl;
     }

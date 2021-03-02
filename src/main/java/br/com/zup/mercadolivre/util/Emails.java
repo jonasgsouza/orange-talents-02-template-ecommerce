@@ -19,7 +19,20 @@ public class Emails {
     }
 
     public void newPurchase(Purchase purchase) {
-        mailer.send("novacompra@mercadolivre.com", purchase.getProductOwner().getEmail(),
-                "Nova compra de " + purchase.getBuyer().getEmail(), "Produto: " + purchase.getProduct().getName());
+        mailer.send("compras@mercadolivre.com", purchase.getProductOwner().getEmail(),
+                "Nova compra de " + purchase.getBuyer().getEmail(), "Produto: " + purchase.getProduct().getName()
+                        + ". Id: " + purchase.getUuid());
+    }
+
+    public void purchasePaid(Purchase purchase) {
+        mailer.send("compras@mercadolivre.com", purchase.getProductOwner().getEmail(),
+                "Compra de " + purchase.getBuyer().getEmail() + " foi paga.", purchase.getProduct().getName());
+    }
+
+    public void purchaseFailed(Purchase purchase, String paymentUrl) {
+        mailer.send("compras@mercadolivre.com", purchase.getBuyer().getEmail(),
+                "Falha no processamento da compra ", "Sua compra do produto "
+                        + purchase.getProduct().getName() + " falhou. Tente novamente através do link: "
+                        + paymentUrl);
     }
 }

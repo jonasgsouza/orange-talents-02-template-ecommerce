@@ -9,9 +9,11 @@ import br.com.zup.mercadolivre.model.User;
 import br.com.zup.mercadolivre.repository.CategoryRepository;
 import br.com.zup.mercadolivre.repository.ProductRepository;
 import br.com.zup.mercadolivre.util.FileUploader;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -40,9 +42,11 @@ public class ProductController {
 
     @PostMapping("/{id}/images")
     @Transactional
-    public ResponseEntity<?> addImages(@PathVariable Long id, @Valid NewProductImageRequest request) {
-        List<String> links = uploader.send(request.getImages());
+    public ResponseEntity<?> addImages(@PathVariable Long id, @Valid NewProductImageRequest request,
+                                       @AuthenticationPrincipal User user) {
         var product = productRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        if (!user.equals(product.getOwner())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        List<String> links = uploader.send(request.getImages());
         product.addImages(links);
         productRepository.save(product);
         return ResponseEntity.ok().build();

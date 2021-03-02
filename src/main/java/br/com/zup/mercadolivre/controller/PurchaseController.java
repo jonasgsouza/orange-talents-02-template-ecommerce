@@ -2,7 +2,6 @@ package br.com.zup.mercadolivre.controller;
 
 import br.com.zup.mercadolivre.controller.request.NewPurchaseRequest;
 import br.com.zup.mercadolivre.exception.InsufficientInventoryException;
-import br.com.zup.mercadolivre.exception.NotFoundException;
 import br.com.zup.mercadolivre.model.User;
 import br.com.zup.mercadolivre.repository.ProductRepository;
 import br.com.zup.mercadolivre.repository.PurchaseRepository;
@@ -39,7 +38,7 @@ public class PurchaseController {
                                          @AuthenticationPrincipal User buyer,
                                          UriComponentsBuilder uriBuilder) {
         var purchase = request.toModel(productRepository, buyer);
-        var decreased = purchase.decreaseInventory(request.getQuantity());
+        var decreased = purchase.decreaseProductInventory();
         if (decreased) {
             purchaseRepository.save(purchase);
             var paymentUrl = purchase.generatePaymentUrl(uriBuilder);

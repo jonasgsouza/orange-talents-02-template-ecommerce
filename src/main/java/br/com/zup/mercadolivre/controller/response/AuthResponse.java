@@ -2,18 +2,18 @@ package br.com.zup.mercadolivre.controller.response;
 
 public class AuthResponse {
     private String token;
-    private String bearer;
+    private String type;
 
-    public AuthResponse(String token, String bearer) {
+    public AuthResponse(String token, String type) {
         this.token = token;
-        this.bearer = bearer;
+        this.type = type;
     }
 
     public String getToken() {
         return token;
     }
 
-    public String getBearer() {
-        return bearer;
+    public String getType() {
+        return type;
     }
 }

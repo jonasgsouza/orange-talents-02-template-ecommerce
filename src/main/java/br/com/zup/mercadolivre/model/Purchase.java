@@ -1,9 +1,13 @@
 package br.com.zup.mercadolivre.model;
 
+import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "compras")
@@ -32,6 +36,9 @@ public class Purchase {
     @ManyToOne
     @JoinColumn(name = "comprador_id")
     private User buyer;
+
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.MERGE)
+    private Set<Transaction> transactions = new HashSet<>();
 
     @Deprecated
     public Purchase() {
@@ -76,11 +83,22 @@ public class Purchase {
         return uuid;
     }
 
+    public void addTransaction(Transaction transaction) {
+        Assert.isTrue(hasNoSucceededTransaction(), "Já existe uma transação finalizada com sucesso");
+        Assert.isTrue(transactions.add(transaction),
+                "Transação com id " + transaction.getGatewayTransactionId() + " já foi processada");
+
+    }
+
+    private boolean hasNoSucceededTransaction() {
+        return transactions.stream().filter(Transaction::succeeded).collect(Collectors.toSet()).isEmpty();
+    }
+
     public String generatePaymentUrl(UriComponentsBuilder uriBuilder) {
         return this.paymentGateway.getGateway().generateUrl(this, uriBuilder);
     }
 
-    public Boolean decreaseInventory(Integer quantity) {
+    public Boolean decreaseProductInventory() {
         return product.decreaseInventory(quantity);
     }
 }
