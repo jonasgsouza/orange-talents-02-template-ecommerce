@@ -6,13 +6,14 @@ import br.com.zup.mercadolivre.model.Transaction;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class NewPagseguroPaymentRequest {
+public class NewPaypalPaymentRequest {
     @NotBlank
     private String paymentId;
-    @NotNull
-    private PagseguroPaymentStatus status;
 
-    public NewPagseguroPaymentRequest(String paymentId, PagseguroPaymentStatus status) {
+    @NotNull
+    private PaypalPaymentStatus status;
+
+    public NewPaypalPaymentRequest(@NotBlank String paymentId, @NotNull PaypalPaymentStatus status) {
         this.paymentId = paymentId;
         this.status = status;
     }
@@ -21,7 +22,7 @@ public class NewPagseguroPaymentRequest {
         return paymentId;
     }
 
-    public PagseguroPaymentStatus getStatus() {
+    public PaypalPaymentStatus getStatus() {
         return status;
     }
 
