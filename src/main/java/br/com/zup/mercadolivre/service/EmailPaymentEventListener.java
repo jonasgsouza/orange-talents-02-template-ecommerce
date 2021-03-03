@@ -8,6 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class EmailPaymentEventListener implements PaymentEventListener {
 
     private final Emails emails;
+    private UriComponentsBuilder uriBuilder;
 
     public EmailPaymentEventListener(Emails emails) {
         this.emails = emails;

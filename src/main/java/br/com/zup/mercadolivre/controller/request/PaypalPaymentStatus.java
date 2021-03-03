@@ -1,6 +1,7 @@
 package br.com.zup.mercadolivre.controller.request;
 
 import br.com.zup.mercadolivre.model.TransactionStatus;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum PaypalPaymentStatus {
@@ -21,5 +22,10 @@ public enum PaypalPaymentStatus {
     @JsonValue
     public Integer getIntVal() {
         return intVal;
+    }
+
+    @JsonCreator
+    public static PaypalPaymentStatus forValue(Integer value) {
+        return value == 1 ? PaypalPaymentStatus.SUCESSO : PaypalPaymentStatus.ERRO;
     }
 }

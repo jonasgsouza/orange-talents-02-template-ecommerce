@@ -4,6 +4,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -104,5 +105,9 @@ public class Purchase {
 
     public Boolean isFinished() {
         return status == PurchaseStatus.FINISHED;
+    }
+
+    public Set<Transaction> getTransactions() {
+        return Collections.unmodifiableSet(transactions);
     }
 }

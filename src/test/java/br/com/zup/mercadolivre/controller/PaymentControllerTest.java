@@ -1,9 +1,13 @@
 package br.com.zup.mercadolivre.controller;
 
-import br.com.zup.mercadolivre.controller.request.NewPurchaseRequest;
+import br.com.zup.mercadolivre.controller.request.NewPaymentRequest;
+import br.com.zup.mercadolivre.controller.request.NewPaypalPaymentRequest;
+import br.com.zup.mercadolivre.controller.request.PaypalPaymentStatus;
 import br.com.zup.mercadolivre.exception.NotFoundException;
 import br.com.zup.mercadolivre.model.PaymentGateway;
 import br.com.zup.mercadolivre.model.Product;
+import br.com.zup.mercadolivre.model.Purchase;
+import br.com.zup.mercadolivre.model.TransactionStatus;
 import br.com.zup.mercadolivre.repository.ProductRepository;
 import br.com.zup.mercadolivre.repository.PurchaseRepository;
 import br.com.zup.mercadolivre.repository.UserRepository;
@@ -16,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,7 +36,7 @@ import javax.transaction.Transactional;
 @ActiveProfiles("test")
 @Transactional
 @WithUserDetails("admin@email.com")
-public class PurchaseControllerTest {
+public class PaymentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,11 +54,12 @@ public class PurchaseControllerTest {
     private UserRepository userRepository;
 
     private Product product;
+    private Purchase purchase;
 
-    private ResultActions performRequest(NewPurchaseRequest request) throws Exception {
+    private ResultActions performRequest(NewPaymentRequest request, String url) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/purchases")
+                        .post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
         );
@@ -65,49 +69,39 @@ public class PurchaseControllerTest {
     public void setUp() {
         product = productRepository.findById(1L).orElseThrow(() -> new NotFoundException(1L));
         var user = userRepository.findById(1L).orElseThrow(() -> new NotFoundException(1L));
+        purchase = new Purchase(10, PaymentGateway.PAYPAL, product, user);
+        purchaseRepository.save(purchase);
     }
 
     @Test
-    @DisplayName("Deveria criar uma nova compra com o gateway paypal")
-    public void shouldCreateNewPurchaseWithPaypal() throws Exception {
-        var request = new NewPurchaseRequest(PaymentGateway.PAYPAL, 10, product.getId());
-        performRequest(request).andExpect(
-                MockMvcResultMatchers.status().is(HttpStatus.FOUND.value())
+    @DisplayName("Deveria processar o pagamento via paypal com status de sucesso")
+    public void shouldProcessPaypalPaymentSuccessfully() throws Exception {
+        var request = new NewPaypalPaymentRequest("id_do_gateway", PaypalPaymentStatus.SUCESSO);
+        performRequest(request, "/payments/paypal/" + purchase.getUuid()).andExpect(
+                MockMvcResultMatchers.status().isOk()
         );
-        var optional = purchaseRepository.findById(2L);
-        Assertions.assertTrue(optional.isPresent());
-        var purchase = optional.get();
         Assertions.assertAll(() -> {
-            Assertions.assertEquals(request.getPaymentGateway(), purchase.getPaymentGateway());
-            Assertions.assertEquals(request.getQuantity(), purchase.getQuantity());
-            Assertions.assertEquals(1, purchaseRepository.count());
+            Assertions.assertTrue(purchase.isFinished());
+            Assertions.assertEquals(1, purchase.getTransactions().size());
         });
+
     }
 
     @Test
-    @DisplayName("Deveria criar uma nova compra com o gateway pagseguro")
-    public void shouldCreateNewPurchaseWithPagseguro() throws Exception {
-        var request = new NewPurchaseRequest(PaymentGateway.PAGSEGURO, 10, product.getId());
-        performRequest(request).andExpect(
-                MockMvcResultMatchers.status().is(HttpStatus.FOUND.value())
+    @DisplayName("Deveria processar o pagamento via paypal com status de erro")
+    public void shouldProcessPaypalPaymentWithError() throws Exception {
+        var request = new NewPaypalPaymentRequest("id_do_gateway", PaypalPaymentStatus.ERRO);
+        performRequest(request, "/payments/paypal/" + purchase.getUuid()).andExpect(
+                MockMvcResultMatchers.status().isOk()
         );
-        var optional = purchaseRepository.findById(1L);
-        Assertions.assertTrue(optional.isPresent());
-        var purchase = optional.get();
         Assertions.assertAll(() -> {
-            Assertions.assertEquals(request.getPaymentGateway(), purchase.getPaymentGateway());
-            Assertions.assertEquals(request.getQuantity(), purchase.getQuantity());
-            Assertions.assertEquals(1, purchaseRepository.count());
+            Assertions.assertFalse(purchase.isFinished());
+            Assertions.assertEquals(1, purchase.getTransactions().size());
+            purchase.getTransactions().forEach(e ->
+                    Assertions.assertEquals(TransactionStatus.FAILED, e.getStatus()));
         });
+
     }
 
-    @Test
-    @DisplayName("Deveria retornar status 400 se quantidade maior que o estoque")
-    public void shouldReturnBadRequestIfQuantityGreaterThanInventory() throws Exception {
-        var request = new NewPurchaseRequest(PaymentGateway.PAYPAL, 40, product.getId());
-        performRequest(request).andExpect(
-                MockMvcResultMatchers.status().isBadRequest()
-        );
-        Assertions.assertEquals(0, purchaseRepository.count());
-    }
+
 }
